@@ -90,3 +90,66 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(element);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const featureCardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                featureCardObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe all feature cards
+    document.querySelectorAll('.feature-card').forEach(card => {
+        featureCardObserver.observe(card);
+    });
+});
+
+// Add this to your existing DOMContentLoaded event handler
+document.addEventListener('DOMContentLoaded', function() {
+
+    const grayscaleBgRow = document.querySelector('.grayscale-bg-row');
+    
+    const grayscaleBgObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-bg');
+                grayscaleBgObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    if (grayscaleBgRow) {
+        grayscaleBgObserver.observe(grayscaleBgRow);
+    }
+});
+
+// Add this to your existing DOMContentLoaded event handler
+document.addEventListener('DOMContentLoaded', function() {
+
+    const serviceCardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                serviceCardObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe all service cards
+    document.querySelectorAll('.service-card-animate').forEach(card => {
+        serviceCardObserver.observe(card);
+    });
+});
