@@ -153,3 +153,64 @@ document.addEventListener('DOMContentLoaded', function() {
         serviceCardObserver.observe(card);
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const benefitsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                benefitsObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe benefits content
+    document.querySelectorAll('.benefits-content-wrapper').forEach(element => {
+        benefitsObserver.observe(element);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Observer for right column animation
+    const rightColumnObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                rightColumnObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+    
+    // Observe the right column
+    document.querySelectorAll('.animate-from-right').forEach(element => {
+        rightColumnObserver.observe(element);
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // Animation for top-to-bottom elements
+    const topColumnObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                topColumnObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+    
+    // Observe elements that should animate from top
+    document.querySelectorAll('.animate-from-top').forEach(element => {
+        topColumnObserver.observe(element);
+    });
+});
