@@ -214,3 +214,22 @@ document.addEventListener('DOMContentLoaded', function() {
         topColumnObserver.observe(element);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Observer for app development bottom image
+    const bottomImageObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                bottomImageObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+    
+    // Observe the app development bottom image
+    document.querySelectorAll('.app-development-bottom-image').forEach(element => {
+        bottomImageObserver.observe(element);
+    });
+});

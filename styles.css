@@ -1871,6 +1871,21 @@ width: 50%;
     animation: rotateInFromRight 1.2s ease-out 0.2s forwards;
 
 }
+.app-development-bottom-image {
+    position: absolute;
+    max-width: 54%;
+    right: 55px;
+    bottom: 180px;
+    z-index: 2;
+    opacity: 0; 
+    transform: translateX(200px) rotate(-45deg); 
+}
+
+
+.app-development-bottom-image.animate {
+    animation: rotateInFromRight 1.2s ease-out forwards;
+    opacity: 1;
+}
 
 .gradient-small-circle {
     width: 65px;
