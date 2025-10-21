@@ -189,3 +189,120 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// Letter animation for hero carousel headings
+document.addEventListener('DOMContentLoaded', function() {
+    // Add data attributes to slides to identify which animation to use
+    const slides = document.querySelectorAll('#heroCarousel .carousel-item');
+    slides[0].setAttribute('data-animation', 'from-right');
+    slides[1].setAttribute('data-animation', 'from-bottom');
+    slides[2].setAttribute('data-animation', 'from-top');
+    
+    // Initialize all slides to have invisible headings
+    slides.forEach(slide => {
+        const headings = slide.querySelectorAll('.animated-text.first, .animated-text.second');
+        headings.forEach(heading => {
+            // Store original text
+            if (!heading.hasAttribute('data-original-text')) {
+                heading.setAttribute('data-original-text', heading.textContent.trim());
+            }
+            // Set initially invisible
+            heading.style.opacity = '0';
+            heading.style.visibility = 'hidden';
+        });
+    });
+    
+    // Initialize the active slide animation after a delay
+    setTimeout(() => {
+        const activeSlide = document.querySelector('#heroCarousel .carousel-item.active');
+        if (activeSlide) {
+            applyLetterAnimations(activeSlide);
+        }
+    }, 100);
+    
+    // Handle carousel slide events
+    const carousel = document.getElementById('heroCarousel');
+    if (carousel) {
+        // BEFORE the slide changes - preemptively reset the target slide
+        carousel.addEventListener('slide.bs.carousel', function(e) {
+            // Ensure target slide headings are completely invisible
+            const nextSlide = e.relatedTarget;
+            const headings = nextSlide.querySelectorAll('.animated-text.first, .animated-text.second');
+            headings.forEach(heading => {
+                heading.style.opacity = '0';
+                heading.style.visibility = 'hidden';
+                heading.classList.remove('animated');
+            });
+        });
+        
+        // AFTER the slide has completed changing
+        carousel.addEventListener('slid.bs.carousel', function(e) {
+            // First reset the current slide completely
+            resetLetterAnimations(e.relatedTarget);
+            
+            // Then apply new animations with a longer delay
+            setTimeout(() => {
+                applyLetterAnimations(e.relatedTarget);
+            }, 100); // Increased delay for smoother transition
+        });
+    }
+});
+
+function resetLetterAnimations(slide) {
+    if (!slide) return;
+    
+    // Get all headings in the slide
+    const headings = slide.querySelectorAll('.animated-text.first, .animated-text.second');
+    
+    headings.forEach(function(heading) {
+        // Store original text content
+        if (!heading.hasAttribute('data-original-text')) {
+            heading.setAttribute('data-original-text', heading.textContent.trim());
+        }
+        
+        // Reset to original state
+        heading.style.opacity = '0';
+        heading.style.visibility = 'hidden';
+        heading.classList.remove('animated');
+        heading.innerHTML = heading.getAttribute('data-original-text');
+    });
+}
+
+function applyLetterAnimations(slide) {
+    if (!slide) return;
+    
+    // Get animation class from slide data attribute
+    const animationClass = slide.getAttribute('data-animation');
+    if (!animationClass) return;
+    
+    // Get all headings in the slide
+    const headings = slide.querySelectorAll('.animated-text.first, .animated-text.second');
+    
+    headings.forEach(function(heading, headingIndex) {
+        // Store original text if not already stored
+        if (!heading.hasAttribute('data-original-text')) {
+            heading.setAttribute('data-original-text', heading.textContent.trim());
+        }
+        
+        const text = heading.getAttribute('data-original-text');
+        heading.innerHTML = ''; // Clear current content
+        heading.classList.add('animated'); // Mark as animated
+        
+        // Create spans for each letter with appropriate animation
+        Array.from(text).forEach((letter, i) => {
+            const span = document.createElement('span');
+            span.className = 'letter ' + animationClass;
+            
+            // Set delay based on letter position and heading
+            const baseDelay = headingIndex * 0.25; // Increased delay between headings
+            span.style.animationDelay = (baseDelay + 0.08 * i) + 's';
+            
+            span.textContent = letter === ' ' ? '\u00A0' : letter; // Preserve spaces
+            heading.appendChild(span);
+        });
+        
+        // Make heading visible but letters will still be initially hidden
+        heading.style.visibility = 'visible';
+        heading.style.opacity = '1';
+    });
+}
